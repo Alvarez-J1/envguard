@@ -1,6 +1,6 @@
 {
-  "name": "envguard",
-  "version": "0.1.0",
+  "name": "@alvarez-j2/envguard",
+  "version": "0.1.2",
   "description": "Small CLI that checks process.env usage against .env.example.",
   "main": "dist/envguard.js",
   "types": "dist/envguard.d.ts",

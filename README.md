@@ -6,9 +6,9 @@ are documented in `.env.example`.
 ## Usage
 
 ```sh
-npx envguard
-npx envguard ./src
-npx envguard -- --env-file .env.local.example ./src
+npx @alvarez-j2/envguard
+npx @alvarez-j2/envguard ./src
+npx @alvarez-j2/envguard --example-file .env.local.example ./src
 ```
 
 `envguard` recursively scans JavaScript and TypeScript files for
@@ -17,14 +17,30 @@ exits with status code `1` when referenced variables are missing from that file.
 When a directory argument is provided, `envguard` scans that directory and looks
 for the nearest `.env.example` starting from that directory and walking upward.
 Use `--env-file <name>` to check a different file name, such as
-`.env.local.example`.
+`.env.local.example`. EnvGuard also supports `--example-file <name>`, which is
+recommended when running through `npx` on modern Node versions.
 
 `--env-file` is also a Node.js runtime flag in modern Node versions. When using
-`npx` or an npm-generated shim, place `--` before EnvGuard's flag as shown above.
+`npx` or an npm-generated shim, use `--example-file` to avoid that collision, or
+place `--` before EnvGuard's `--env-file` flag.
 When running the compiled CLI directly with Node, use:
 
 ```sh
 node -- ./dist/cli.js --env-file .env.local.example ./src
+```
+
+## Testing a Published Version Locally
+
+If you run `npx @alvarez-j2/envguard@<version>` from inside this package's own
+source directory, npm may resolve the current folder as the requested package.
+On Windows that can fail before EnvGuard starts because the root package does
+not have a generated `node_modules/.bin/envguard.cmd` shim.
+
+Run the published package from another directory, or pass npm a different
+execution prefix:
+
+```sh
+npx --yes --prefix C:\Users\Owner\projects @alvarez-j2/envguard@0.1.2 --example-file .env.local.example C:\Users\Owner\projects\Elevate
 ```
 
 The scanner ignores `node_modules`, `.git`, `dist`, `build`, and `.next`.

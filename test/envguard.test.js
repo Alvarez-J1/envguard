@@ -1,9 +1,11 @@
 const assert = require("node:assert/strict");
 const { spawnSync } = require("node:child_process");
-const { mkdir, mkdtemp, rm, writeFile } = require("node:fs/promises");
+const { mkdir, mkdtemp, readFile, rm, writeFile } = require("node:fs/promises");
 const os = require("node:os");
 const path = require("node:path");
 const { test } = require("node:test");
+
+const packageJson = require("../package.json");
 
 const {
   checkEnvironmentVariables,
@@ -139,6 +141,49 @@ test("CLI supports --env-file for custom example env files", async () => {
   });
 });
 
+test("CLI supports --example-file without a Node separator", async () => {
+  await withFixture(async (fixtureDir) => {
+    await mkdir(path.join(fixtureDir, "src"));
+    await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
+    await writeFile(path.join(fixtureDir, "src", "index.ts"), "process.env.API_URL;\n");
+
+    const result = spawnSync(
+      process.execPath,
+      [
+        path.join(__dirname, "..", "dist", "cli.js"),
+        "--example-file",
+        ".env.local.example",
+        path.join(fixtureDir, "src")
+      ],
+      { encoding: "utf8" }
+    );
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /\.env\.local\.example/);
+  });
+});
+
+test("CLI supports --example-file=value syntax", async () => {
+  await withFixture(async (fixtureDir) => {
+    await mkdir(path.join(fixtureDir, "src"));
+    await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
+    await writeFile(path.join(fixtureDir, "src", "index.ts"), "process.env.API_URL;\n");
+
+    const result = spawnSync(
+      process.execPath,
+      [
+        path.join(__dirname, "..", "dist", "cli.js"),
+        "--example-file=.env.local.example",
+        path.join(fixtureDir, "src")
+      ],
+      { encoding: "utf8" }
+    );
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /\.env\.local\.example/);
+  });
+});
+
 test("CLI accepts a separator before --env-file for npm-style shims", async () => {
   await withFixture(async (fixtureDir) => {
     await mkdir(path.join(fixtureDir, "src"));
@@ -160,6 +205,17 @@ test("CLI accepts a separator before --env-file for npm-style shims", async () =
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /\.env\.local\.example/);
   });
+});
+
+test("package exposes an executable envguard bin", async () => {
+  assert.equal(packageJson.bin.envguard, "dist/cli.js");
+
+  const cliSource = await readFile(
+    path.join(__dirname, "..", packageJson.bin.envguard),
+    "utf8"
+  );
+
+  assert.match(cliSource, /^#!\/usr\/bin\/env node/);
 });
 
 async function withFixture(callback) {

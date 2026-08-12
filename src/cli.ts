@@ -18,13 +18,14 @@ Checks JavaScript and TypeScript files for process.env.NAME references and
 verifies that each NAME exists in an example env file.
 
 Options:
-  --env-file <name>  Example env file name to check (default: .env.example)
-  -h, --help         Show this help message
+  --example-file <name>  Example env file name to check (default: .env.example)
+  --env-file <name>      Alias for --example-file
+  -h, --help             Show this help message
 
 Examples:
   envguard
   envguard ./src
-  envguard -- --env-file .env.local.example ./src`;
+  envguard --example-file .env.local.example ./src`;
 
 async function main(args: string[]): Promise<number> {
   const options = parseArgs(args);
@@ -73,11 +74,11 @@ function parseArgs(args: string[]): CliOptions {
       continue;
     }
 
-    if (arg === "--env-file") {
+    if (arg === "--env-file" || arg === "--example-file") {
       const value = args[index + 1];
 
       if (value === undefined || value.startsWith("-")) {
-        throw new Error("--env-file requires a file name");
+        throw new Error(`${arg} requires a file name`);
       }
 
       envFileName = parseEnvFileName(value);
@@ -87,6 +88,11 @@ function parseArgs(args: string[]): CliOptions {
 
     if (arg.startsWith("--env-file=")) {
       envFileName = parseEnvFileName(arg.slice("--env-file=".length));
+      continue;
+    }
+
+    if (arg.startsWith("--example-file=")) {
+      envFileName = parseEnvFileName(arg.slice("--example-file=".length));
       continue;
     }
 
@@ -112,7 +118,7 @@ function parseEnvFileName(value: string): string {
   const envFileName = value.trim();
 
   if (envFileName === "") {
-    throw new Error("--env-file requires a file name");
+    throw new Error("Env file option requires a file name");
   }
 
   return envFileName;
