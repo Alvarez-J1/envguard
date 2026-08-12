@@ -1,0 +1,35 @@
+{
+  "name": "envguard",
+  "version": "0.1.0",
+  "description": "Small CLI that checks process.env usage against .env.example.",
+  "main": "dist/envguard.js",
+  "types": "dist/envguard.d.ts",
+  "bin": {
+    "envguard": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "env",
+    "dotenv",
+    "cli",
+    "ci"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
