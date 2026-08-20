@@ -14,6 +14,7 @@ type CliOptions = {
 
 const EXIT_SUCCESS = 0;
 const EXIT_FAILURE = 1;
+type ExitCode = typeof EXIT_SUCCESS | typeof EXIT_FAILURE;
 
 const USAGE = `Usage: envguard [options] [directory]
 
@@ -30,7 +31,7 @@ Examples:
   envguard ./src
   envguard --example-file .env.local.example ./src`;
 
-async function main(args: string[]): Promise<number> {
+async function main(args: string[]): Promise<ExitCode> {
   const options = parseArgs(args);
 
   if (options.help) {
