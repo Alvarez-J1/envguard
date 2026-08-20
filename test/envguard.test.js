@@ -101,6 +101,26 @@ test("scan ignores TypeScript declaration files", async () => {
   });
 });
 
+test("scan skips build output and git metadata directories", async () => {
+  await withFixture(async (fixtureDir) => {
+    await mkdir(path.join(fixtureDir, ".git"), { recursive: true });
+    await mkdir(path.join(fixtureDir, "build"), { recursive: true });
+    await mkdir(path.join(fixtureDir, "dist"), { recursive: true });
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, ".git", "ignored.js"), "process.env.GIT_VAR;\n");
+    await writeFile(path.join(fixtureDir, "build", "ignored.js"), "process.env.BUILD_VAR;\n");
+    await writeFile(path.join(fixtureDir, "dist", "ignored.js"), "process.env.DIST_VAR;\n");
+
+    const result = await checkEnvironmentVariables(
+      fixtureDir,
+      path.join(fixtureDir, ".env.example")
+    );
+
+    assert.deepEqual(result.referencedVariables, []);
+    assert.equal(result.filesScanned, 0);
+  });
+});
+
 test("findEnvExamplePath finds .env.example above the scanned directory", async () => {
   await withFixture(async (fixtureDir) => {
     const srcDir = path.join(fixtureDir, "src");
