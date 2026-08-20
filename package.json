@@ -33,6 +33,7 @@
   "homepage": "https://github.com/Alvarez-J1/envguard#readme",
   "author": "",
   "license": "MIT",
+  "packageManager": "npm@10.9.2",
   "devDependencies": {
     "@types/node": "^22.13.9",
     "typescript": "^5.8.2"
