@@ -20,6 +20,11 @@ Use `--env-file <name>` to check a different file name, such as
 `.env.local.example`. EnvGuard also supports `--example-file <name>`, which is
 recommended when running through `npx` on modern Node versions.
 
+## Supported Syntax
+
+EnvGuard detects direct dot notation such as `process.env.API_URL`. Dynamic
+access such as `process.env["API_URL"]` is intentionally out of scope.
+
 `--env-file` is also a Node.js runtime flag in modern Node versions. When using
 `npx` or an npm-generated shim, use `--example-file` to avoid that collision, or
 place `--` before EnvGuard's `--env-file` flag.
@@ -67,6 +72,3 @@ The implementation is intentionally small:
 - `src/envguard.ts` contains scanning, `.env.example` parsing, and comparison logic.
 - `src/cli.ts` handles arguments, printing, and exit codes.
 - `test/envguard.test.js` tests the real compiled package output.
-
-The detector focuses on direct dot notation, like `process.env.API_URL`. Dynamic
-access such as `process.env["API_URL"]` is intentionally out of scope.
