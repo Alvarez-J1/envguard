@@ -43,6 +43,18 @@ test("parseEnvExample reads declared variables", () => {
   ]);
 });
 
+test("parseEnvExample supports underscores and digits after the first character", () => {
+  const source = `
+    API_V2_URL=
+    _INTERNAL_TOKEN=
+  `;
+
+  assert.deepEqual([...parseEnvExample(source)].sort(), [
+    "API_V2_URL",
+    "_INTERNAL_TOKEN"
+  ]);
+});
+
 test("checkEnvironmentVariables reports variables missing from .env.example", async () => {
   await withFixture(async (fixtureDir) => {
     await mkdir(path.join(fixtureDir, "src"));
