@@ -29,6 +29,12 @@ test("findEnvReferences detects process.env dot references", () => {
   ]);
 });
 
+test("findEnvReferences tolerates whitespace around dots", () => {
+  const source = "const value = process . env . SPACED_ENV_NAME;\n";
+
+  assert.deepEqual([...findEnvReferences(source)], ["SPACED_ENV_NAME"]);
+});
+
 test("parseEnvExample reads declared variables", () => {
   const source = `
     # Example configuration
