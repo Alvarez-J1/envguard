@@ -23,6 +23,14 @@
     "cli",
     "ci"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alvarez-J1/envguard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Alvarez-J1/envguard/issues"
+  },
+  "homepage": "https://github.com/Alvarez-J1/envguard#readme",
   "author": "",
   "license": "MIT",
   "devDependencies": {
