@@ -215,6 +215,14 @@ test("CLI supports --env-file for custom example env files", async () => {
   });
 });
 
+test("CLI prints help successfully", () => {
+  const result = runCli(["--help"]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Usage: envguard/);
+  assert.match(result.stdout, /--example-file/);
+});
+
 test("CLI supports --example-file without a Node separator", async () => {
   await withFixture(async (fixtureDir) => {
     await mkdir(path.join(fixtureDir, "src"));
