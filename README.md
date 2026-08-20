@@ -1,5 +1,7 @@
 # envguard
 
+[![CI](https://github.com/Alvarez-J1/envguard/actions/workflows/ci.yml/badge.svg)](https://github.com/Alvarez-J1/envguard/actions/workflows/ci.yml)
+
 Small npm CLI that checks whether environment variables referenced in source code
 are documented in `.env.example`.
 
