@@ -12,6 +12,9 @@ type CliOptions = {
   targetDirArg?: string;
 };
 
+const EXIT_SUCCESS = 0;
+const EXIT_FAILURE = 1;
+
 const USAGE = `Usage: envguard [options] [directory]
 
 Checks JavaScript and TypeScript files for process.env.NAME references and
@@ -32,7 +35,7 @@ async function main(args: string[]): Promise<number> {
 
   if (options.help) {
     console.log(USAGE);
-    return 0;
+    return EXIT_SUCCESS;
   }
 
   const targetDir = path.resolve(process.cwd(), options.targetDirArg ?? ".");
@@ -49,14 +52,14 @@ async function main(args: string[]): Promise<number> {
 
     console.error("");
     console.error(`Scanned ${result.filesScanned} source file(s).`);
-    return 1;
+    return EXIT_FAILURE;
   }
 
   console.log(
     `envguard: all ${result.referencedVariables.length} referenced environment variable(s) are declared in ${options.envFileName}`
   );
   console.log(`Scanned ${result.filesScanned} source file(s).`);
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 function parseArgs(args: string[]): CliOptions {
@@ -131,5 +134,5 @@ main(process.argv.slice(2))
   .catch((error) => {
     const message = error instanceof Error ? error.message : String(error);
     console.error(`envguard: ${message}`);
-    process.exitCode = 1;
+    process.exitCode = EXIT_FAILURE;
   });
