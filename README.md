@@ -45,6 +45,11 @@ npx --yes --prefix C:\Users\Owner\projects @alvarez-j2/envguard@0.1.2 --example-
 
 The scanner ignores `node_modules`, `.git`, `dist`, `build`, and `.next`.
 
+## Exit Codes
+
+- `0` when every referenced variable is declared in the example env file.
+- `1` when variables are missing or EnvGuard cannot complete the scan.
+
 ## Development
 
 ```sh
