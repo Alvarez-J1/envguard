@@ -86,6 +86,21 @@ test("checkEnvironmentVariables throws a helpful error when .env.example is miss
   });
 });
 
+test("scan ignores TypeScript declaration files", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, "types.d.ts"), "process.env.DECLARATION_ONLY;\n");
+
+    const result = await checkEnvironmentVariables(
+      fixtureDir,
+      path.join(fixtureDir, ".env.example")
+    );
+
+    assert.deepEqual(result.referencedVariables, []);
+    assert.equal(result.filesScanned, 0);
+  });
+});
+
 test("findEnvExamplePath finds .env.example above the scanned directory", async () => {
   await withFixture(async (fixtureDir) => {
     const srcDir = path.join(fixtureDir, "src");
