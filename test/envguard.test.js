@@ -121,6 +121,29 @@ test("scan skips build output and git metadata directories", async () => {
   });
 });
 
+test("scan includes modern JavaScript and TypeScript module extensions", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, "config.mjs"), "process.env.MJS_VAR;\n");
+    await writeFile(path.join(fixtureDir, "config.cjs"), "process.env.CJS_VAR;\n");
+    await writeFile(path.join(fixtureDir, "config.mts"), "process.env.MTS_VAR;\n");
+    await writeFile(path.join(fixtureDir, "config.cts"), "process.env.CTS_VAR;\n");
+
+    const result = await checkEnvironmentVariables(
+      fixtureDir,
+      path.join(fixtureDir, ".env.example")
+    );
+
+    assert.deepEqual(result.referencedVariables, [
+      "CJS_VAR",
+      "CTS_VAR",
+      "MJS_VAR",
+      "MTS_VAR"
+    ]);
+    assert.equal(result.filesScanned, 4);
+  });
+});
+
 test("findEnvExamplePath finds .env.example above the scanned directory", async () => {
   await withFixture(async (fixtureDir) => {
     const srcDir = path.join(fixtureDir, "src");
