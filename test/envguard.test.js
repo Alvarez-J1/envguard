@@ -223,6 +223,13 @@ test("CLI prints help successfully", () => {
   assert.match(result.stdout, /--example-file/);
 });
 
+test("CLI rejects unknown options", () => {
+  const result = runCli(["--unknown"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /Unknown option: --unknown/);
+});
+
 test("CLI supports --example-file without a Node separator", async () => {
   await withFixture(async (fixtureDir) => {
     await mkdir(path.join(fixtureDir, "src"));
