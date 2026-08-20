@@ -23,6 +23,8 @@ const SOURCE_EXTENSIONS = new Set([
 
 const ENV_REFERENCE_PATTERN = /\bprocess\s*\.\s*env\s*\.\s*([A-Za-z_][A-Za-z0-9_]*)\b/g;
 const ENV_EXAMPLE_LINE_PATTERN = /^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/;
+const ENV_FILE_PREFIX = ".env";
+const EXAMPLE_FILE_SUFFIX = ".example";
 
 export const DEFAULT_ENV_FILE_NAME = ".env.example";
 
@@ -274,7 +276,7 @@ async function findEnvExampleAlternatives(
 }
 
 function isEnvExampleAlternativeName(fileName: string): boolean {
-  return fileName.startsWith(".env") && fileName.endsWith(".example");
+  return fileName.startsWith(ENV_FILE_PREFIX) && fileName.endsWith(EXAMPLE_FILE_SUFFIX);
 }
 
 function createMissingEnvExampleMessage(
