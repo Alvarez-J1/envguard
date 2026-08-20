@@ -6,6 +6,7 @@ const path = require("node:path");
 const { test } = require("node:test");
 
 const packageJson = require("../package.json");
+const CLI_PATH = path.join(__dirname, "..", "dist", "cli.js");
 
 const {
   checkEnvironmentVariables,
@@ -124,16 +125,13 @@ test("CLI supports --env-file for custom example env files", async () => {
     await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
     await writeFile(path.join(fixtureDir, "src", "index.ts"), "process.env.API_URL;\n");
 
-    const result = spawnSync(
-      process.execPath,
+    const result = runCli(
       [
-        "--",
-        path.join(__dirname, "..", "dist", "cli.js"),
         "--env-file",
         ".env.local.example",
         path.join(fixtureDir, "src")
       ],
-      { encoding: "utf8" }
+      ["--"]
     );
 
     assert.equal(result.status, 0, result.stderr);
@@ -147,16 +145,11 @@ test("CLI supports --example-file without a Node separator", async () => {
     await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
     await writeFile(path.join(fixtureDir, "src", "index.ts"), "process.env.API_URL;\n");
 
-    const result = spawnSync(
-      process.execPath,
-      [
-        path.join(__dirname, "..", "dist", "cli.js"),
-        "--example-file",
-        ".env.local.example",
-        path.join(fixtureDir, "src")
-      ],
-      { encoding: "utf8" }
-    );
+    const result = runCli([
+      "--example-file",
+      ".env.local.example",
+      path.join(fixtureDir, "src")
+    ]);
 
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /\.env\.local\.example/);
@@ -169,15 +162,10 @@ test("CLI supports --example-file=value syntax", async () => {
     await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
     await writeFile(path.join(fixtureDir, "src", "index.ts"), "process.env.API_URL;\n");
 
-    const result = spawnSync(
-      process.execPath,
-      [
-        path.join(__dirname, "..", "dist", "cli.js"),
-        "--example-file=.env.local.example",
-        path.join(fixtureDir, "src")
-      ],
-      { encoding: "utf8" }
-    );
+    const result = runCli([
+      "--example-file=.env.local.example",
+      path.join(fixtureDir, "src")
+    ]);
 
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /\.env\.local\.example/);
@@ -190,17 +178,12 @@ test("CLI accepts a separator before --env-file for npm-style shims", async () =
     await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
     await writeFile(path.join(fixtureDir, "src", "index.ts"), "process.env.API_URL;\n");
 
-    const result = spawnSync(
-      process.execPath,
-      [
-        path.join(__dirname, "..", "dist", "cli.js"),
-        "--",
-        "--env-file",
-        ".env.local.example",
-        path.join(fixtureDir, "src")
-      ],
-      { encoding: "utf8" }
-    );
+    const result = runCli([
+      "--",
+      "--env-file",
+      ".env.local.example",
+      path.join(fixtureDir, "src")
+    ]);
 
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /\.env\.local\.example/);
@@ -226,4 +209,10 @@ async function withFixture(callback) {
   } finally {
     await rm(fixtureDir, { recursive: true, force: true });
   }
+}
+
+function runCli(args, nodeArgs = []) {
+  return spawnSync(process.execPath, [...nodeArgs, CLI_PATH, ...args], {
+    encoding: "utf8"
+  });
 }
