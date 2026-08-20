@@ -256,10 +256,7 @@ async function findEnvExampleAlternatives(
   try {
     entries = await fs.readdir(directoryPath, { withFileTypes: true });
   } catch (error) {
-    if (
-      isNodeError(error) &&
-      (error.code === "ENOENT" || error.code === "EACCES" || error.code === "EPERM")
-    ) {
+    if (isRecoverableDirectoryReadError(error)) {
       return [];
     }
 
@@ -298,4 +295,11 @@ function getErrorMessage(error: unknown): string {
 
 function isNodeError(error: unknown): error is NodeJS.ErrnoException {
   return error instanceof Error && "code" in error;
+}
+
+function isRecoverableDirectoryReadError(error: unknown): boolean {
+  return (
+    isNodeError(error) &&
+    (error.code === "ENOENT" || error.code === "EACCES" || error.code === "EPERM")
+  );
 }
