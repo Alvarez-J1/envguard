@@ -230,6 +230,13 @@ test("CLI rejects unknown options", () => {
   assert.match(result.stderr, /Unknown option: --unknown/);
 });
 
+test("CLI rejects multiple directory arguments", () => {
+  const result = runCli(["src", "test"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /expected at most one directory argument/);
+});
+
 test("CLI supports --example-file without a Node separator", async () => {
   await withFixture(async (fixtureDir) => {
     await mkdir(path.join(fixtureDir, "src"));
