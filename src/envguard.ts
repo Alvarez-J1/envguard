@@ -268,10 +268,13 @@ async function findEnvExampleAlternatives(
       (entry) =>
         entry.isFile() &&
         entry.name !== envFileName &&
-        entry.name.startsWith(".env") &&
-        entry.name.endsWith(".example")
+        isEnvExampleAlternativeName(entry.name)
     )
     .map((entry) => path.join(directoryPath, entry.name));
+}
+
+function isEnvExampleAlternativeName(fileName: string): boolean {
+  return fileName.startsWith(".env") && fileName.endsWith(".example");
 }
 
 function createMissingEnvExampleMessage(
