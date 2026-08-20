@@ -45,6 +45,11 @@ npx --yes --prefix C:\Users\Owner\projects @alvarez-j2/envguard@0.1.2 --example-
 
 The scanner ignores `node_modules`, `.git`, `dist`, `build`, and `.next`.
 
+## Scanned Files
+
+EnvGuard scans `.js`, `.jsx`, `.ts`, `.tsx`, `.mjs`, `.cjs`, `.mts`, and `.cts`
+files. TypeScript declaration files ending in `.d.ts` are skipped.
+
 ## Exit Codes
 
 - `0` when every referenced variable is declared in the example env file.
