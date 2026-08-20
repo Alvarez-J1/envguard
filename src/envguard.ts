@@ -1,4 +1,5 @@
 import { promises as fs } from "node:fs";
+import type { Stats } from "node:fs";
 import path from "node:path";
 
 const IGNORED_DIRECTORIES = new Set([
@@ -203,7 +204,7 @@ function isSourceFile(fileName: string): boolean {
   return SOURCE_EXTENSIONS.has(path.extname(fileName));
 }
 
-async function statDirectory(rootDir: string) {
+async function statDirectory(rootDir: string): Promise<Stats> {
   try {
     return await fs.stat(rootDir);
   } catch (error) {
