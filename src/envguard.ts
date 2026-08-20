@@ -25,18 +25,20 @@ const ENV_EXAMPLE_LINE_PATTERN = /^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/;
 
 export const DEFAULT_ENV_FILE_NAME = ".env.example";
 
+export type EnvVariableName = string;
+
 export type ScanResult = {
   filesScanned: number;
-  referencedVariables: string[];
+  referencedVariables: EnvVariableName[];
 };
 
 export type CheckResult = ScanResult & {
-  definedVariables: string[];
-  missingVariables: string[];
+  definedVariables: EnvVariableName[];
+  missingVariables: EnvVariableName[];
 };
 
-export function findEnvReferences(source: string): Set<string> {
-  const variables = new Set<string>();
+export function findEnvReferences(source: string): Set<EnvVariableName> {
+  const variables = new Set<EnvVariableName>();
 
   for (const match of source.matchAll(ENV_REFERENCE_PATTERN)) {
     variables.add(match[1]);
@@ -45,8 +47,8 @@ export function findEnvReferences(source: string): Set<string> {
   return variables;
 }
 
-export function parseEnvExample(source: string): Set<string> {
-  const variables = new Set<string>();
+export function parseEnvExample(source: string): Set<EnvVariableName> {
+  const variables = new Set<EnvVariableName>();
 
   for (const rawLine of source.split(/\r?\n/)) {
     const line = rawLine.trim();
@@ -65,7 +67,7 @@ export function parseEnvExample(source: string): Set<string> {
   return variables;
 }
 
-export async function readEnvExample(filePath: string): Promise<Set<string>> {
+export async function readEnvExample(filePath: string): Promise<Set<EnvVariableName>> {
   const envFileName = path.basename(filePath);
 
   try {
@@ -122,7 +124,7 @@ export async function scanDirectory(rootDir: string): Promise<ScanResult> {
     throw new Error(`Scan target is not a directory: ${rootDir}`);
   }
 
-  const referencedVariables = new Set<string>();
+  const referencedVariables = new Set<EnvVariableName>();
   let filesScanned = 0;
 
   async function walk(currentDir: string): Promise<void> {
