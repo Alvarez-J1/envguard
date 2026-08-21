@@ -12,7 +12,8 @@ const {
   checkEnvironmentVariables,
   findEnvExamplePath,
   findEnvReferences,
-  parseEnvExample
+  parseEnvExample,
+  scanDirectory
 } = require("../dist/envguard.js");
 
 test("findEnvReferences detects process.env dot references", () => {
@@ -100,6 +101,19 @@ test("checkEnvironmentVariables throws a helpful error when .env.example is miss
     await assert.rejects(
       () => checkEnvironmentVariables(fixtureDir, path.join(fixtureDir, ".env.example")),
       /Could not find \.env\.example/
+    );
+  });
+});
+
+test("scanDirectory rejects file paths", async () => {
+  await withFixture(async (fixtureDir) => {
+    const filePath = path.join(fixtureDir, "index.ts");
+
+    await writeFile(filePath, "process.env.API_URL;\n");
+
+    await assert.rejects(
+      () => scanDirectory(filePath),
+      /Scan target is not a directory/
     );
   });
 });
