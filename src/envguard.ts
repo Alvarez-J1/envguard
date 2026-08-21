@@ -199,11 +199,15 @@ export async function checkEnvironmentVariables(
 }
 
 function isSourceFile(fileName: string): boolean {
-  if (fileName.endsWith(".d.ts")) {
+  if (isDeclarationFile(fileName)) {
     return false;
   }
 
   return SOURCE_EXTENSIONS.has(path.extname(fileName));
+}
+
+function isDeclarationFile(fileName: string): boolean {
+  return fileName.endsWith(".d.ts");
 }
 
 function isIgnoredDirectory(directoryName: string): boolean {
