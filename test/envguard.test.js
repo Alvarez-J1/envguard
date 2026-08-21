@@ -249,6 +249,13 @@ test("CLI rejects env file options without a value", () => {
   assert.match(result.stderr, /--example-file requires a file name/);
 });
 
+test("CLI rejects empty env file assignment values", () => {
+  const result = runCli(["--example-file="]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /Env file option requires a file name/);
+});
+
 test("CLI rejects multiple directory arguments", () => {
   const result = runCli(["src", "test"]);
 
