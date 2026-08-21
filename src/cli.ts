@@ -17,6 +17,8 @@ const EXIT_FAILURE = 1;
 type ExitCode = typeof EXIT_SUCCESS | typeof EXIT_FAILURE;
 const ENV_FILE_OPTION = "--env-file";
 const EXAMPLE_FILE_OPTION = "--example-file";
+const ENV_FILE_ASSIGNMENT_PREFIX = `${ENV_FILE_OPTION}=`;
+const EXAMPLE_FILE_ASSIGNMENT_PREFIX = `${EXAMPLE_FILE_OPTION}=`;
 
 const USAGE = `Usage: envguard [options] [directory]
 
@@ -92,13 +94,13 @@ function parseArgs(args: string[]): CliOptions {
       continue;
     }
 
-    if (arg.startsWith(`${ENV_FILE_OPTION}=`)) {
-      envFileName = parseEnvFileName(arg.slice(`${ENV_FILE_OPTION}=`.length));
+    if (arg.startsWith(ENV_FILE_ASSIGNMENT_PREFIX)) {
+      envFileName = parseEnvFileName(arg.slice(ENV_FILE_ASSIGNMENT_PREFIX.length));
       continue;
     }
 
-    if (arg.startsWith(`${EXAMPLE_FILE_OPTION}=`)) {
-      envFileName = parseEnvFileName(arg.slice(`${EXAMPLE_FILE_OPTION}=`.length));
+    if (arg.startsWith(EXAMPLE_FILE_ASSIGNMENT_PREFIX)) {
+      envFileName = parseEnvFileName(arg.slice(EXAMPLE_FILE_ASSIGNMENT_PREFIX.length));
       continue;
     }
 
