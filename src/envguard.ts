@@ -143,7 +143,7 @@ export async function scanDirectory(rootDir: string): Promise<ScanResult> {
       const entryPath = path.join(currentDir, entry.name);
 
       if (entry.isDirectory()) {
-        if (!IGNORED_DIRECTORIES.has(entry.name)) {
+        if (!isIgnoredDirectory(entry.name)) {
           await walk(entryPath);
         }
 
@@ -204,6 +204,10 @@ function isSourceFile(fileName: string): boolean {
   }
 
   return SOURCE_EXTENSIONS.has(path.extname(fileName));
+}
+
+function isIgnoredDirectory(directoryName: string): boolean {
+  return IGNORED_DIRECTORIES.has(directoryName);
 }
 
 async function statDirectory(rootDir: string): Promise<Stats> {
