@@ -215,6 +215,18 @@ test("CLI supports --env-file for custom example env files", async () => {
   });
 });
 
+test("CLI succeeds when no environment variables are referenced", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, "index.ts"), "export const value = 1;\n");
+
+    const result = runCli([fixtureDir]);
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /all 0 referenced environment variable/);
+  });
+});
+
 test("CLI prints help successfully", () => {
   const result = runCli(["--help"]);
 
