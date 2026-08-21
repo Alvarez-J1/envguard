@@ -241,6 +241,19 @@ test("CLI succeeds when no environment variables are referenced", async () => {
   });
 });
 
+test("CLI reports missing variables with a failure exit code", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, "index.ts"), "process.env.MISSING_API_KEY;\n");
+
+    const result = runCli([fixtureDir]);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /missing variables in \.env\.example/);
+    assert.match(result.stderr, /MISSING_API_KEY/);
+  });
+});
+
 test("CLI prints help successfully", () => {
   const result = runCli(["--help"]);
 
