@@ -242,6 +242,13 @@ test("CLI rejects unknown options", () => {
   assert.match(result.stderr, /Unknown option: --unknown/);
 });
 
+test("CLI rejects env file options without a value", () => {
+  const result = runCli(["--example-file"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--example-file requires a file name/);
+});
+
 test("CLI rejects multiple directory arguments", () => {
   const result = runCli(["src", "test"]);
 
