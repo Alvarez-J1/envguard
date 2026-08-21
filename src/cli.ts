@@ -76,7 +76,7 @@ function parseArgs(args: string[]): CliOptions {
       return { envFileName, help: true };
     }
 
-    if (arg === "--") {
+    if (isOptionSeparator(arg)) {
       continue;
     }
 
@@ -132,6 +132,10 @@ function parseEnvFileName(value: string): string {
 
 function isHelpArg(arg: string): boolean {
   return arg === "--help" || arg === "-h";
+}
+
+function isOptionSeparator(arg: string): boolean {
+  return arg === "--";
 }
 
 main(process.argv.slice(2))
