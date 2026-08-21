@@ -85,6 +85,10 @@ npm install
 npm test
 ```
 
+`npm test` builds the TypeScript sources and runs the Node.js test suite. The
+GitHub Actions workflow also runs `npm pack --dry-run` to check the publishable
+package contents.
+
 The implementation is intentionally small:
 
 - `src/envguard.ts` contains scanning, `.env.example` parsing, and comparison logic.
