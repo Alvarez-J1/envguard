@@ -69,6 +69,15 @@ files. TypeScript declaration files ending in `.d.ts` are skipped.
 - `0` when every referenced variable is declared in the example env file.
 - `1` when variables are missing or EnvGuard cannot complete the scan.
 
+## CI Usage
+
+EnvGuard exits with status code `1` when variables are missing, so it can fail a
+CI job directly:
+
+```sh
+npx @alvarez-j2/envguard --example-file .env.local.example ./src
+```
+
 ## Development
 
 ```sh
