@@ -13,6 +13,13 @@ npx @alvarez-j2/envguard ./src
 npx @alvarez-j2/envguard --example-file .env.local.example ./src
 ```
 
+## Options
+
+- `[directory]` scans that directory instead of the current working directory.
+- `--example-file <name>` checks a custom example env file name.
+- `--env-file <name>` is an alias for `--example-file`.
+- `-h, --help` prints the CLI help text.
+
 `envguard` recursively scans JavaScript and TypeScript files for
 `process.env.VARIABLE_NAME`, reads variable names from an example env file, and
 exits with status code `1` when referenced variables are missing from that file.
