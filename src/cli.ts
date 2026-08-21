@@ -72,7 +72,7 @@ function parseArgs(args: string[]): CliOptions {
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
 
-    if (arg === "--help" || arg === "-h") {
+    if (isHelpArg(arg)) {
       return { envFileName, help: true };
     }
 
@@ -128,6 +128,10 @@ function parseEnvFileName(value: string): string {
   }
 
   return envFileName;
+}
+
+function isHelpArg(arg: string): boolean {
+  return arg === "--help" || arg === "-h";
 }
 
 main(process.argv.slice(2))
