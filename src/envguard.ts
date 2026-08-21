@@ -218,7 +218,7 @@ async function statDirectory(rootDir: string): Promise<Stats> {
   }
 }
 
-function sortSet(values: Set<string>): string[] {
+function sortSet<T extends string>(values: ReadonlySet<T>): T[] {
   return [...values].sort((left, right) => left.localeCompare(right));
 }
 
