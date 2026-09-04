@@ -331,6 +331,21 @@ test("CLI scans the current directory by default", async () => {
   });
 });
 
+test("CLI finds the example env file above the scanned directory", async () => {
+  await withFixture(async (fixtureDir) => {
+    const srcDir = path.join(fixtureDir, "src");
+
+    await mkdir(srcDir);
+    await writeFile(path.join(fixtureDir, ".env.example"), "API_URL=\n");
+    await writeFile(path.join(srcDir, "index.ts"), "process.env.API_URL;\n");
+
+    const result = runCli([srcDir]);
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /all 1 referenced environment variable/);
+  });
+});
+
 test("CLI reports missing variables with a failure exit code", async () => {
   await withFixture(async (fixtureDir) => {
     await writeFile(path.join(fixtureDir, ".env.example"), "");
