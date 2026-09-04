@@ -62,6 +62,16 @@ test("parseEnvExample supports underscores and digits after the first character"
   ]);
 });
 
+test("parseEnvExample ignores invalid variable names", () => {
+  const source = `
+    1INVALID=
+    HAS-DASH=
+    VALID_NAME=
+  `;
+
+  assert.deepEqual([...parseEnvExample(source)], ["VALID_NAME"]);
+});
+
 test("checkEnvironmentVariables reports variables missing from .env.example", async () => {
   await withFixture(async (fixtureDir) => {
     await mkdir(path.join(fixtureDir, "src"));
