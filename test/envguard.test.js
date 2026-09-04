@@ -319,6 +319,18 @@ test("CLI succeeds when no environment variables are referenced", async () => {
   });
 });
 
+test("CLI scans the current directory by default", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "API_URL=\n");
+    await writeFile(path.join(fixtureDir, "index.ts"), "process.env.API_URL;\n");
+
+    const result = runCli([], [], { cwd: fixtureDir });
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /all 1 referenced environment variable/);
+  });
+});
+
 test("CLI reports missing variables with a failure exit code", async () => {
   await withFixture(async (fixtureDir) => {
     await writeFile(path.join(fixtureDir, ".env.example"), "");
@@ -440,8 +452,9 @@ async function withFixture(callback) {
   }
 }
 
-function runCli(args, nodeArgs = []) {
+function runCli(args, nodeArgs = [], options = {}) {
   return spawnSync(process.execPath, [...nodeArgs, CLI_PATH, ...args], {
+    cwd: options.cwd,
     encoding: "utf8"
   });
 }
