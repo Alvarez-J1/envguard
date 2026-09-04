@@ -59,6 +59,18 @@ test("parseEnvExample reads declared variables", () => {
   ]);
 });
 
+test("parseEnvExample allows whitespace around assignments", () => {
+  const source = `
+      API_URL = https://example.com
+      export SECRET_TOKEN =
+  `;
+
+  assert.deepEqual([...parseEnvExample(source)].sort(), [
+    "API_URL",
+    "SECRET_TOKEN"
+  ]);
+});
+
 test("parseEnvExample supports underscores and digits after the first character", () => {
   const source = `
     API_V2_URL=
