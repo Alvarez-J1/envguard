@@ -207,6 +207,25 @@ test("scan includes modern JavaScript and TypeScript module extensions", async (
   });
 });
 
+test("scan includes JSX and TSX source files", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, "Component.jsx"), "process.env.JSX_VAR;\n");
+    await writeFile(path.join(fixtureDir, "Component.tsx"), "process.env.TSX_VAR;\n");
+
+    const result = await checkEnvironmentVariables(
+      fixtureDir,
+      path.join(fixtureDir, ".env.example")
+    );
+
+    assert.deepEqual(result.referencedVariables, [
+      "JSX_VAR",
+      "TSX_VAR"
+    ]);
+    assert.equal(result.filesScanned, 2);
+  });
+});
+
 test("findEnvExamplePath finds .env.example above the scanned directory", async () => {
   await withFixture(async (fixtureDir) => {
     const srcDir = path.join(fixtureDir, "src");
