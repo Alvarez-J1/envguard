@@ -100,9 +100,7 @@ export async function findEnvExamplePath(
   const startStats = await statDirectory(currentDir);
   const alternativePaths = new Set<string>();
 
-  if (!startStats.isDirectory()) {
-    throw new Error(`Scan target is not a directory: ${currentDir}`);
-  }
+  assertIsDirectory(startStats, currentDir);
 
   while (true) {
     const candidatePath = path.join(currentDir, envFileName);
@@ -128,9 +126,7 @@ export async function findEnvExamplePath(
 export async function scanDirectory(rootDir: string): Promise<ScanResult> {
   const rootStats = await statDirectory(rootDir);
 
-  if (!rootStats.isDirectory()) {
-    throw new Error(`Scan target is not a directory: ${rootDir}`);
-  }
+  assertIsDirectory(rootStats, rootDir);
 
   const referencedVariables = new Set<EnvVariableName>();
   let filesScanned = 0;
@@ -237,6 +233,12 @@ async function statDirectory(rootDir: string): Promise<Stats> {
     }
 
     throw new Error(`Could not access scan target ${rootDir}: ${getErrorMessage(error)}`);
+  }
+}
+
+function assertIsDirectory(stats: Stats, directoryPath: string): void {
+  if (!stats.isDirectory()) {
+    throw new Error(`Scan target is not a directory: ${directoryPath}`);
   }
 }
 
