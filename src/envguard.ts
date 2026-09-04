@@ -155,14 +155,7 @@ export async function scanDirectory(rootDir: string): Promise<ScanResult> {
         continue;
       }
 
-      let source;
-
-      try {
-        source = await fs.readFile(entryPath, TEXT_FILE_ENCODING);
-      } catch (error) {
-        throw new Error(`Could not read source file ${entryPath}: ${getErrorMessage(error)}`);
-      }
-
+      const source = await readSourceFile(entryPath);
       filesScanned += 1;
 
       for (const variable of findEnvReferences(source)) {
@@ -213,6 +206,14 @@ function isDeclarationFile(fileName: string): boolean {
 
 function isIgnoredDirectory(directoryName: string): boolean {
   return IGNORED_DIRECTORIES.has(directoryName);
+}
+
+async function readSourceFile(filePath: string): Promise<string> {
+  try {
+    return await fs.readFile(filePath, TEXT_FILE_ENCODING);
+  } catch (error) {
+    throw new Error(`Could not read source file ${filePath}: ${getErrorMessage(error)}`);
+  }
 }
 
 async function statDirectory(rootDir: string): Promise<Stats> {
