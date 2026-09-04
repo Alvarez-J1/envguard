@@ -25,6 +25,7 @@ const ENV_REFERENCE_PATTERN = /\bprocess\s*\.\s*env\s*\.\s*([A-Za-z_][A-Za-z0-9_
 const ENV_EXAMPLE_LINE_PATTERN = /^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/;
 const ENV_FILE_PREFIX = ".env";
 const EXAMPLE_FILE_SUFFIX = ".example";
+const TEXT_FILE_ENCODING = "utf8";
 
 export const DEFAULT_ENV_FILE_NAME = ".env.example";
 
@@ -74,7 +75,7 @@ export async function readEnvExample(filePath: string): Promise<Set<EnvVariableN
   const envFileName = path.basename(filePath);
 
   try {
-    const source = await fs.readFile(filePath, "utf8");
+    const source = await fs.readFile(filePath, TEXT_FILE_ENCODING);
     return parseEnvExample(source);
   } catch (error) {
     if (isNodeError(error) && error.code === "ENOENT") {
@@ -157,7 +158,7 @@ export async function scanDirectory(rootDir: string): Promise<ScanResult> {
       let source;
 
       try {
-        source = await fs.readFile(entryPath, "utf8");
+        source = await fs.readFile(entryPath, TEXT_FILE_ENCODING);
       } catch (error) {
         throw new Error(`Could not read source file ${entryPath}: ${getErrorMessage(error)}`);
       }
