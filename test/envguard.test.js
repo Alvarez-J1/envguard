@@ -7,6 +7,7 @@ const { test } = require("node:test");
 
 const packageJson = require("../package.json");
 const CLI_PATH = path.join(__dirname, "..", "dist", "cli.js");
+const CLI_ENCODING = "utf8";
 const FIXTURE_PREFIX = "envguard-";
 
 const {
@@ -560,6 +561,6 @@ async function withFixture(callback) {
 function runCli(args, nodeArgs = [], options = {}) {
   return spawnSync(process.execPath, [...nodeArgs, CLI_PATH, ...args], {
     cwd: options.cwd,
-    encoding: "utf8"
+    encoding: CLI_ENCODING
   });
 }
