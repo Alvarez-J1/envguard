@@ -263,6 +263,22 @@ test("scan includes JSX and TSX source files", async () => {
   });
 });
 
+test("scan ignores files without source extensions", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, "config.json"), "{\"value\":\"process.env.JSON_VAR\"}\n");
+    await writeFile(path.join(fixtureDir, "README.md"), "process.env.DOCS_VAR\n");
+
+    const result = await checkEnvironmentVariables(
+      fixtureDir,
+      path.join(fixtureDir, ".env.example")
+    );
+
+    assert.deepEqual(result.referencedVariables, []);
+    assert.equal(result.filesScanned, 0);
+  });
+});
+
 test("findEnvExamplePath finds .env.example above the scanned directory", async () => {
   await withFixture(async (fixtureDir) => {
     const srcDir = path.join(fixtureDir, "src");
