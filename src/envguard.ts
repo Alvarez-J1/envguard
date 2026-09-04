@@ -73,10 +73,14 @@ export function parseEnvExample(source: string): Set<EnvVariableName> {
 
 export async function readEnvExample(filePath: string): Promise<Set<EnvVariableName>> {
   const envFileName = path.basename(filePath);
+  const source = await readEnvExampleSource(filePath, envFileName);
 
+  return parseEnvExample(source);
+}
+
+async function readEnvExampleSource(filePath: string, envFileName: string): Promise<string> {
   try {
-    const source = await fs.readFile(filePath, TEXT_FILE_ENCODING);
-    return parseEnvExample(source);
+    return await fs.readFile(filePath, TEXT_FILE_ENCODING);
   } catch (error) {
     if (isNodeError(error) && error.code === "ENOENT") {
       throw new Error(`Could not find ${envFileName} at ${filePath}`);
