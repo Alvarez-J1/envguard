@@ -498,6 +498,23 @@ test("CLI supports --example-file=value syntax", async () => {
   });
 });
 
+test("CLI accepts a separator before --env-file=value syntax", async () => {
+  await withFixture(async (fixtureDir) => {
+    await mkdir(path.join(fixtureDir, "src"));
+    await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
+    await writeFile(path.join(fixtureDir, "src", "index.ts"), "process.env.API_URL;\n");
+
+    const result = runCli([
+      "--",
+      "--env-file=.env.local.example",
+      path.join(fixtureDir, "src")
+    ]);
+
+    assert.equal(result.status, 0, result.stderr);
+    assert.match(result.stdout, /\.env\.local\.example/);
+  });
+});
+
 test("CLI accepts a separator before --env-file for npm-style shims", async () => {
   await withFixture(async (fixtureDir) => {
     await mkdir(path.join(fixtureDir, "src"));
