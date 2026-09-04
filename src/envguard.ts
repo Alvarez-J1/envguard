@@ -309,7 +309,7 @@ function isEnvExampleAlternativeName(fileName: string): boolean {
 function createMissingEnvExampleMessage(
   startDir: string,
   envFileName: string,
-  alternativePaths: Set<string>
+  alternativePaths: ReadonlySet<string>
 ): string {
   const baseMessage = `Could not find ${envFileName} in ${startDir} or any parent directory`;
   const sortedAlternativePaths = sortSet(alternativePaths);
