@@ -93,6 +93,15 @@ test("parseEnvExample ignores invalid variable names", () => {
   assert.deepEqual([...parseEnvExample(source)], ["VALID_NAME"]);
 });
 
+test("parseEnvExample returns each variable once", () => {
+  const source = `
+    API_URL=
+    API_URL=https://example.com
+  `;
+
+  assert.deepEqual([...parseEnvExample(source)], ["API_URL"]);
+});
+
 test("checkEnvironmentVariables reports variables missing from .env.example", async () => {
   await withFixture(async (fixtureDir) => {
     await mkdir(path.join(fixtureDir, "src"));
