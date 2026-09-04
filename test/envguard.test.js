@@ -315,6 +315,17 @@ test("findEnvExamplePath rejects absolute env file names", async () => {
   );
 });
 
+test("findEnvExamplePath ignores directories with the env example name", async () => {
+  await withFixture(async (fixtureDir) => {
+    await mkdir(path.join(fixtureDir, ".env.example"));
+
+    await assert.rejects(
+      () => findEnvExamplePath(fixtureDir),
+      /Could not find \.env\.example/
+    );
+  });
+});
+
 test("findEnvExamplePath mentions similarly named example files", async () => {
   await withFixture(async (fixtureDir) => {
     await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
