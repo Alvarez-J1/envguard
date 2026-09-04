@@ -181,8 +181,9 @@ export async function checkEnvironmentVariables(
     readEnvExample(envExamplePath)
   ]);
 
-  const missingVariables = scanResult.referencedVariables.filter(
-    (variable) => !definedVariablesSet.has(variable)
+  const missingVariables = findMissingVariables(
+    scanResult.referencedVariables,
+    definedVariablesSet
   );
 
   return {
@@ -206,6 +207,13 @@ function isDeclarationFile(fileName: string): boolean {
 
 function isIgnoredDirectory(directoryName: string): boolean {
   return IGNORED_DIRECTORIES.has(directoryName);
+}
+
+function findMissingVariables(
+  referencedVariables: readonly EnvVariableName[],
+  definedVariables: ReadonlySet<EnvVariableName>
+): EnvVariableName[] {
+  return referencedVariables.filter((variable) => !definedVariables.has(variable));
 }
 
 async function readSourceFile(filePath: string): Promise<string> {
