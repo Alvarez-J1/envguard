@@ -43,7 +43,7 @@ async function main(args: string[]): Promise<ExitCode> {
     return EXIT_SUCCESS;
   }
 
-  const targetDir = path.resolve(process.cwd(), options.targetDirArg ?? ".");
+  const targetDir = resolveTargetDir(options.targetDirArg);
   const envExamplePath = await findEnvExamplePath(targetDir, options.envFileName);
   const result = await checkEnvironmentVariables(targetDir, envExamplePath);
 
@@ -130,6 +130,10 @@ function parseEnvFileName(value: string): string {
   }
 
   return envFileName;
+}
+
+function resolveTargetDir(targetDirArg: string | undefined): string {
+  return path.resolve(process.cwd(), targetDirArg ?? ".");
 }
 
 function isHelpArg(arg: string): boolean {
