@@ -417,6 +417,13 @@ test("CLI prints help successfully", () => {
   assert.match(result.stdout, /--example-file/);
 });
 
+test("CLI supports the short help flag", () => {
+  const result = runCli(["-h"]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Usage: envguard/);
+});
+
 test("CLI rejects unknown options", () => {
   const result = runCli(["--unknown"]);
 
