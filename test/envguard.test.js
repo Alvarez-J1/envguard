@@ -184,6 +184,34 @@ test("scan skips build output and git metadata directories", async () => {
   });
 });
 
+test("scan skips ignored directories at any depth", async () => {
+  await withFixture(async (fixtureDir) => {
+    const packageDir = path.join(fixtureDir, "packages", "app");
+
+    await mkdir(path.join(packageDir, "src"), { recursive: true });
+    await mkdir(path.join(packageDir, "src", "node_modules"), { recursive: true });
+    await mkdir(path.join(packageDir, "src", ".next"), { recursive: true });
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(packageDir, "src", "index.ts"), "process.env.APP_VAR;\n");
+    await writeFile(
+      path.join(packageDir, "src", "node_modules", "ignored.js"),
+      "process.env.NESTED_NODE_MODULES;\n"
+    );
+    await writeFile(
+      path.join(packageDir, "src", ".next", "ignored.js"),
+      "process.env.NESTED_NEXT;\n"
+    );
+
+    const result = await checkEnvironmentVariables(
+      fixtureDir,
+      path.join(fixtureDir, ".env.example")
+    );
+
+    assert.deepEqual(result.referencedVariables, ["APP_VAR"]);
+    assert.equal(result.filesScanned, 1);
+  });
+});
+
 test("scan includes modern JavaScript and TypeScript module extensions", async () => {
   await withFixture(async (fixtureDir) => {
     await writeFile(path.join(fixtureDir, ".env.example"), "");
