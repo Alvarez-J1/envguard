@@ -36,6 +36,15 @@ test("findEnvReferences tolerates whitespace around dots", () => {
   assert.deepEqual([...findEnvReferences(source)], ["SPACED_ENV_NAME"]);
 });
 
+test("findEnvReferences ignores identifiers that start with digits", () => {
+  const source = `
+    process.env.1INVALID;
+    process.env.VALID_NAME;
+  `;
+
+  assert.deepEqual([...findEnvReferences(source)], ["VALID_NAME"]);
+});
+
 test("parseEnvExample reads declared variables", () => {
   const source = `
     # Example configuration
