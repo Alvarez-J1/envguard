@@ -402,6 +402,19 @@ test("CLI rejects empty env file assignment values", () => {
   assert.match(result.stderr, /Env file option requires a file name/);
 });
 
+test("CLI rejects env file names that include paths", async () => {
+  await withFixture(async (fixtureDir) => {
+    const result = runCli([
+      "--example-file",
+      "config/.env.example",
+      fixtureDir
+    ]);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Env file must be a file name, not a path/);
+  });
+});
+
 test("CLI rejects multiple directory arguments", () => {
   const result = runCli(["src", "test"]);
 
