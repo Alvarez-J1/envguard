@@ -2,7 +2,7 @@ import { promises as fs } from "node:fs";
 import type { Stats } from "node:fs";
 import path from "node:path";
 
-const IGNORED_DIRECTORIES = new Set([
+const IGNORED_DIRECTORIES: ReadonlySet<string> = new Set([
   "node_modules",
   ".git",
   "dist",
@@ -10,7 +10,7 @@ const IGNORED_DIRECTORIES = new Set([
   ".next"
 ]);
 
-const SOURCE_EXTENSIONS = new Set([
+const SOURCE_EXTENSIONS: ReadonlySet<string> = new Set([
   ".js",
   ".jsx",
   ".ts",
