@@ -7,6 +7,7 @@ const { test } = require("node:test");
 
 const packageJson = require("../package.json");
 const CLI_PATH = path.join(__dirname, "..", "dist", "cli.js");
+const FIXTURE_PREFIX = "envguard-";
 
 const {
   checkEnvironmentVariables,
@@ -547,7 +548,7 @@ test("package exposes an executable envguard bin", async () => {
 });
 
 async function withFixture(callback) {
-  const fixtureDir = await mkdtemp(path.join(os.tmpdir(), "envguard-"));
+  const fixtureDir = await mkdtemp(path.join(os.tmpdir(), FIXTURE_PREFIX));
 
   try {
     await callback(fixtureDir);
