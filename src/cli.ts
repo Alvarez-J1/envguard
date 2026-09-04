@@ -48,15 +48,7 @@ async function main(args: string[]): Promise<ExitCode> {
   const result = await checkEnvironmentVariables(targetDir, envExamplePath);
 
   if (result.missingVariables.length > 0) {
-    console.error(`envguard: missing variables in ${options.envFileName}`);
-    console.error("");
-
-    for (const variable of result.missingVariables) {
-      console.error(`  ${variable}`);
-    }
-
-    console.error("");
-    console.error(`Scanned ${result.filesScanned} source file(s).`);
+    printMissingVariables(result.missingVariables, result.filesScanned, options.envFileName);
     return EXIT_FAILURE;
   }
 
@@ -142,6 +134,22 @@ function printSuccess(
     `envguard: all ${referencedVariableCount} referenced environment variable(s) are declared in ${envFileName}`
   );
   console.log(`Scanned ${filesScanned} source file(s).`);
+}
+
+function printMissingVariables(
+  missingVariables: readonly string[],
+  filesScanned: number,
+  envFileName: string
+): void {
+  console.error(`envguard: missing variables in ${envFileName}`);
+  console.error("");
+
+  for (const variable of missingVariables) {
+    console.error(`  ${variable}`);
+  }
+
+  console.error("");
+  console.error(`Scanned ${filesScanned} source file(s).`);
 }
 
 function isHelpArg(arg: string): boolean {
