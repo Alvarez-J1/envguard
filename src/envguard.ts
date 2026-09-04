@@ -1,5 +1,5 @@
 import { promises as fs } from "node:fs";
-import type { Stats } from "node:fs";
+import type { Dirent, Stats } from "node:fs";
 import path from "node:path";
 
 const IGNORED_DIRECTORIES: ReadonlySet<string> = new Set([
@@ -131,7 +131,7 @@ export async function scanDirectory(rootDir: string): Promise<ScanResult> {
   let filesScanned = 0;
 
   async function walk(currentDir: string): Promise<void> {
-    let entries;
+    let entries: Dirent[];
 
     try {
       entries = await fs.readdir(currentDir, { withFileTypes: true });
