@@ -378,6 +378,7 @@ test("CLI scans the current directory by default", async () => {
 
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /all 1 referenced environment variable/);
+    assert.match(result.stdout, /Scanned 1 source file/);
   });
 });
 
