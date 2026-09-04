@@ -60,10 +60,7 @@ async function main(args: string[]): Promise<ExitCode> {
     return EXIT_FAILURE;
   }
 
-  console.log(
-    `envguard: all ${result.referencedVariables.length} referenced environment variable(s) are declared in ${options.envFileName}`
-  );
-  console.log(`Scanned ${result.filesScanned} source file(s).`);
+  printSuccess(result.referencedVariables.length, result.filesScanned, options.envFileName);
   return EXIT_SUCCESS;
 }
 
@@ -134,6 +131,17 @@ function parseEnvFileName(value: string): string {
 
 function resolveTargetDir(targetDirArg: string | undefined): string {
   return path.resolve(process.cwd(), targetDirArg ?? ".");
+}
+
+function printSuccess(
+  referencedVariableCount: number,
+  filesScanned: number,
+  envFileName: string
+): void {
+  console.log(
+    `envguard: all ${referencedVariableCount} referenced environment variable(s) are declared in ${envFileName}`
+  );
+  console.log(`Scanned ${filesScanned} source file(s).`);
 }
 
 function isHelpArg(arg: string): boolean {
