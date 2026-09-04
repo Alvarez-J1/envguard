@@ -261,7 +261,7 @@ async function findEnvExampleAlternatives(
   directoryPath: string,
   envFileName: string
 ): Promise<string[]> {
-  let entries;
+  let entries: Dirent[];
 
   try {
     entries = await fs.readdir(directoryPath, { withFileTypes: true });
