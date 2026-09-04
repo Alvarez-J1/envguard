@@ -284,13 +284,16 @@ async function findEnvExampleAlternatives(
   }
 
   return entries
-    .filter(
-      (entry) =>
-        entry.isFile() &&
-        entry.name !== envFileName &&
-        isEnvExampleAlternativeName(entry.name)
-    )
+    .filter((entry) => isEnvExampleAlternative(entry, envFileName))
     .map((entry) => path.join(directoryPath, entry.name));
+}
+
+function isEnvExampleAlternative(entry: Dirent, envFileName: string): boolean {
+  return (
+    entry.isFile() &&
+    entry.name !== envFileName &&
+    isEnvExampleAlternativeName(entry.name)
+  );
 }
 
 function isEnvExampleAlternativeName(fileName: string): boolean {
