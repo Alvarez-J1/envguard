@@ -283,6 +283,13 @@ test("findEnvExamplePath rejects env file names with path separators", async () 
   );
 });
 
+test("findEnvExamplePath rejects absolute env file names", async () => {
+  await assert.rejects(
+    () => findEnvExamplePath(".", path.resolve(".env.example")),
+    /Env file must be a file name, not a path/
+  );
+});
+
 test("findEnvExamplePath mentions similarly named example files", async () => {
   await withFixture(async (fixtureDir) => {
     await writeFile(path.join(fixtureDir, ".env.local.example"), "API_URL=\n");
