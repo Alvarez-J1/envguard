@@ -245,13 +245,13 @@ function validateEnvFileName(envFileName: string): void {
     throw new Error("Env file name cannot be empty");
   }
 
-  if (
-    path.isAbsolute(envFileName) ||
-    envFileName.includes("/") ||
-    envFileName.includes("\\")
-  ) {
+  if (path.isAbsolute(envFileName) || hasPathSeparator(envFileName)) {
     throw new Error(`Env file must be a file name, not a path: ${envFileName}`);
   }
+}
+
+function hasPathSeparator(fileName: string): boolean {
+  return fileName.includes("/") || fileName.includes("\\");
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
