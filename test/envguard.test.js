@@ -407,6 +407,7 @@ test("CLI reports missing variables with a failure exit code", async () => {
     assert.equal(result.status, 1);
     assert.match(result.stderr, /missing variables in \.env\.example/);
     assert.match(result.stderr, /MISSING_API_KEY/);
+    assert.match(result.stderr, /Scanned 1 source file/);
   });
 });
 
