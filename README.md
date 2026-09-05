@@ -82,6 +82,7 @@ npx @alvarez-j2/envguard --example-file .env.local.example ./src
 
 ```sh
 npm install
+npm run typecheck
 npm test
 ```
 
