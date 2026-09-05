@@ -21,6 +21,8 @@
   "keywords": [
     "env",
     "dotenv",
+    "environment-variables",
+    "env-example",
     "cli",
     "ci"
   ],
