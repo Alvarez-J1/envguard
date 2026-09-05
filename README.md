@@ -84,6 +84,7 @@ npx @alvarez-j2/envguard --example-file .env.local.example ./src
 npm install
 npm run typecheck
 npm test
+npm pack --dry-run
 ```
 
 `npm test` builds the TypeScript sources and runs the Node.js test suite. The
