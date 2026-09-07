@@ -16,6 +16,7 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "npm run build && node --test",
+    "pack:dry-run": "npm pack --dry-run",
     "prepublishOnly": "npm test"
   },
   "keywords": [
