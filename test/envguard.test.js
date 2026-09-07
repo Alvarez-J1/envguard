@@ -79,6 +79,12 @@ test("parseEnvExample allows whitespace after export", () => {
   assert.deepEqual([...parseEnvExample(source)], ["API_URL"]);
 });
 
+test("parseEnvExample allows inline comments after values", () => {
+  const source = "API_URL=https://example.com # public API endpoint\n";
+
+  assert.deepEqual([...parseEnvExample(source)], ["API_URL"]);
+});
+
 test("parseEnvExample supports underscores and digits after the first character", () => {
   const source = `
     API_V2_URL=
