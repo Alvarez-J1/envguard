@@ -85,6 +85,15 @@ test("parseEnvExample allows inline comments after values", () => {
   assert.deepEqual([...parseEnvExample(source)], ["API_URL"]);
 });
 
+test("parseEnvExample ignores indented comments", () => {
+  const source = `
+      # API_URL is documented elsewhere
+      SECRET_TOKEN=
+  `;
+
+  assert.deepEqual([...parseEnvExample(source)], ["SECRET_TOKEN"]);
+});
+
 test("parseEnvExample supports underscores and digits after the first character", () => {
   const source = `
     API_V2_URL=
