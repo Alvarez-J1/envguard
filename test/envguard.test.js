@@ -174,6 +174,18 @@ test("checkEnvironmentVariables throws a helpful error when .env.example is miss
   });
 });
 
+test("checkEnvironmentVariables returns defined variables in sorted order", async () => {
+  await withFixture(async (fixtureDir) => {
+    const envExamplePath = path.join(fixtureDir, ".env.example");
+
+    await writeFile(envExamplePath, "Z_VAR=\nA_VAR=\n");
+
+    const result = await checkEnvironmentVariables(fixtureDir, envExamplePath);
+
+    assert.deepEqual(result.definedVariables, ["A_VAR", "Z_VAR"]);
+  });
+});
+
 test("scanDirectory rejects file paths", async () => {
   await withFixture(async (fixtureDir) => {
     const filePath = path.join(fixtureDir, "index.ts");
