@@ -47,6 +47,12 @@ test("findEnvReferences ignores identifiers that start with digits", () => {
   assert.deepEqual([...findEnvReferences(source)], ["VALID_NAME"]);
 });
 
+test("findEnvReferences ignores longer environment property names", () => {
+  const source = "process.environment.API_URL; process.env.SECRET_TOKEN;\n";
+
+  assert.deepEqual([...findEnvReferences(source)], ["SECRET_TOKEN"]);
+});
+
 test("parseEnvExample reads declared variables", () => {
   const source = `
     # Example configuration
