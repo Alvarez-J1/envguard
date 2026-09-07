@@ -12,6 +12,8 @@ type CliOptions = {
   targetDirArg?: string;
 };
 
+type CliArgs = readonly string[];
+
 const EXIT_SUCCESS = 0;
 const EXIT_FAILURE = 1;
 type ExitCode = typeof EXIT_SUCCESS | typeof EXIT_FAILURE;
@@ -35,7 +37,7 @@ Examples:
   envguard ./src
   envguard --example-file .env.local.example ./src`;
 
-async function main(args: readonly string[]): Promise<ExitCode> {
+async function main(args: CliArgs): Promise<ExitCode> {
   const options = parseArgs(args);
 
   if (options.help) {
@@ -56,7 +58,7 @@ async function main(args: readonly string[]): Promise<ExitCode> {
   return EXIT_SUCCESS;
 }
 
-function parseArgs(args: readonly string[]): CliOptions {
+function parseArgs(args: CliArgs): CliOptions {
   const positionalArgs: string[] = [];
   let envFileName = DEFAULT_ENV_FILE_NAME;
 
