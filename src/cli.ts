@@ -47,7 +47,7 @@ async function main(args: string[]): Promise<ExitCode> {
   const envExamplePath = await findEnvExamplePath(targetDir, options.envFileName);
   const result = await checkEnvironmentVariables(targetDir, envExamplePath);
 
-  if (result.missingVariables.length > 0) {
+  if (hasMissingVariables(result.missingVariables)) {
     printMissingVariables(result.missingVariables, result.filesScanned, options.envFileName);
     return EXIT_FAILURE;
   }
@@ -123,6 +123,10 @@ function parseEnvFileName(value: string): string {
 
 function resolveTargetDir(targetDirArg: string | undefined): string {
   return path.resolve(process.cwd(), targetDirArg ?? ".");
+}
+
+function hasMissingVariables(missingVariables: readonly string[]): boolean {
+  return missingVariables.length > 0;
 }
 
 function printSuccess(
