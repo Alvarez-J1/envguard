@@ -463,6 +463,22 @@ test("CLI reports missing variables with a failure exit code", async () => {
   });
 });
 
+test("CLI reports the selected example file in missing output", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.local.example"), "");
+    await writeFile(path.join(fixtureDir, "index.ts"), "process.env.MISSING_API_KEY;\n");
+
+    const result = runCli([
+      "--example-file",
+      ".env.local.example",
+      fixtureDir
+    ]);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /missing variables in \.env\.local\.example/);
+  });
+});
+
 test("CLI prints help successfully", () => {
   const result = runCli(["--help"]);
 
