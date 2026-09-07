@@ -622,6 +622,10 @@ test("package includes docs and license in published files", () => {
   ]);
 });
 
+test("package declares the supported Node.js engine range", () => {
+  assert.equal(packageJson.engines.node, ">=18");
+});
+
 async function withFixture(callback) {
   const fixtureDir = await mkdtemp(path.join(os.tmpdir(), FIXTURE_PREFIX));
 
