@@ -23,6 +23,7 @@ const SOURCE_EXTENSIONS: ReadonlySet<string> = new Set([
 
 const ENV_REFERENCE_PATTERN = /\bprocess\s*\.\s*env\s*\.\s*([A-Za-z_][A-Za-z0-9_]*)\b/g;
 const ENV_EXAMPLE_LINE_PATTERN = /^(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=/;
+const LINE_SPLIT_PATTERN = /\r?\n/;
 const ENV_FILE_PREFIX = ".env";
 const EXAMPLE_FILE_SUFFIX = ".example";
 const TEXT_FILE_ENCODING = "utf8";
@@ -54,7 +55,7 @@ export function findEnvReferences(source: string): Set<EnvVariableName> {
 export function parseEnvExample(source: string): Set<EnvVariableName> {
   const variables = new Set<EnvVariableName>();
 
-  for (const rawLine of source.split(/\r?\n/)) {
+  for (const rawLine of source.split(LINE_SPLIT_PATTERN)) {
     const line = rawLine.trim();
 
     if (line === "" || line.startsWith("#")) {
