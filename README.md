@@ -82,14 +82,13 @@ npx @alvarez-j2/envguard --example-file .env.local.example ./src
 
 ```sh
 npm install
-npm run typecheck
-npm test
+npm run check
 npm run pack:dry-run
 ```
 
-`npm test` builds the TypeScript sources and runs the Node.js test suite. The
-GitHub Actions workflow also runs `npm pack --dry-run` to check the publishable
-package contents.
+`npm run check` type-checks the project, builds the TypeScript sources, and
+runs the Node.js test suite. The GitHub Actions workflow also runs
+`npm run pack:dry-run` to check the publishable package contents.
 
 The implementation is intentionally small:
 
