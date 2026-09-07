@@ -630,6 +630,10 @@ test("package exposes a dry-run packing script", () => {
   assert.equal(packageJson.scripts["pack:dry-run"], "npm pack --dry-run");
 });
 
+test("package checks before publishing", () => {
+  assert.equal(packageJson.scripts.prepublishOnly, "npm run check");
+});
+
 async function withFixture(callback) {
   const fixtureDir = await mkdtemp(path.join(os.tmpdir(), FIXTURE_PREFIX));
 
