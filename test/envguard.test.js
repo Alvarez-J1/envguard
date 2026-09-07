@@ -626,6 +626,10 @@ test("package declares the supported Node.js engine range", () => {
   assert.equal(packageJson.engines.node, ">=18");
 });
 
+test("package exposes a dry-run packing script", () => {
+  assert.equal(packageJson.scripts["pack:dry-run"], "npm pack --dry-run");
+});
+
 async function withFixture(callback) {
   const fixtureDir = await mkdtemp(path.join(os.tmpdir(), FIXTURE_PREFIX));
 
