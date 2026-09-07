@@ -292,6 +292,17 @@ test("scan includes JSX and TSX source files", async () => {
   });
 });
 
+test("scan returns referenced variables in sorted order", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, "index.ts"), "process.env.Z_VAR; process.env.A_VAR;\n");
+
+    const result = await scanDirectory(fixtureDir);
+
+    assert.deepEqual(result.referencedVariables, ["A_VAR", "Z_VAR"]);
+  });
+});
+
 test("scan ignores files without source extensions", async () => {
   await withFixture(async (fixtureDir) => {
     await writeFile(path.join(fixtureDir, ".env.example"), "");
