@@ -614,6 +614,14 @@ test("package exposes an executable envguard bin", async () => {
   assert.match(cliSource, /^#!\/usr\/bin\/env node/);
 });
 
+test("package includes docs and license in published files", () => {
+  assert.deepEqual(packageJson.files, [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]);
+});
+
 async function withFixture(callback) {
   const fixtureDir = await mkdtemp(path.join(os.tmpdir(), FIXTURE_PREFIX));
 
