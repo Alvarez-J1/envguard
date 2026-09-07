@@ -73,6 +73,12 @@ test("parseEnvExample allows whitespace around assignments", () => {
   ]);
 });
 
+test("parseEnvExample allows whitespace after export", () => {
+  const source = "export   API_URL=https://example.com\n";
+
+  assert.deepEqual([...parseEnvExample(source)], ["API_URL"]);
+});
+
 test("parseEnvExample supports underscores and digits after the first character", () => {
   const source = `
     API_V2_URL=
