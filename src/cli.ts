@@ -35,7 +35,7 @@ Examples:
   envguard ./src
   envguard --example-file .env.local.example ./src`;
 
-async function main(args: string[]): Promise<ExitCode> {
+async function main(args: readonly string[]): Promise<ExitCode> {
   const options = parseArgs(args);
 
   if (options.help) {
@@ -56,7 +56,7 @@ async function main(args: string[]): Promise<ExitCode> {
   return EXIT_SUCCESS;
 }
 
-function parseArgs(args: string[]): CliOptions {
+function parseArgs(args: readonly string[]): CliOptions {
   const positionalArgs: string[] = [];
   let envFileName = DEFAULT_ENV_FILE_NAME;
 
