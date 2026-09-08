@@ -59,6 +59,12 @@ test("findEnvReferences handles trailing semicolons", () => {
   assert.deepEqual([...findEnvReferences(source)], ["API_URL"]);
 });
 
+test("findEnvReferences handles optional chaining after env names", () => {
+  const source = "const trimmed = process.env.API_URL?.trim();\n";
+
+  assert.deepEqual([...findEnvReferences(source)], ["API_URL"]);
+});
+
 test("parseEnvExample reads declared variables", () => {
   const source = `
     # Example configuration
