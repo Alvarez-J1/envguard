@@ -18,7 +18,8 @@
     "test": "npm run build && node --test",
     "check": "npm run typecheck && npm test",
     "pack:dry-run": "npm pack --dry-run",
-    "prepublishOnly": "npm run check"
+    "check:publish": "npm run check && npm run pack:dry-run",
+    "prepublishOnly": "npm run check:publish"
   },
   "keywords": [
     "env",

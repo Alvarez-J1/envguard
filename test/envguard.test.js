@@ -670,7 +670,8 @@ test("package exposes a dry-run packing script", () => {
 });
 
 test("package checks before publishing", () => {
-  assert.equal(packageJson.scripts.prepublishOnly, "npm run check");
+  assert.equal(packageJson.scripts["check:publish"], "npm run check && npm run pack:dry-run");
+  assert.equal(packageJson.scripts.prepublishOnly, "npm run check:publish");
 });
 
 async function withFixture(callback) {
