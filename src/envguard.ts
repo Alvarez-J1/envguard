@@ -199,7 +199,7 @@ function isSourceFile(fileName: string): boolean {
     return false;
   }
 
-  return SOURCE_EXTENSIONS.has(path.extname(fileName));
+  return SOURCE_EXTENSIONS.has(path.extname(fileName).toLowerCase());
 }
 
 function isDeclarationFile(fileName: string): boolean {

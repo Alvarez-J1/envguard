@@ -328,6 +328,21 @@ test("scan includes JSX and TSX source files", async () => {
   });
 });
 
+test("scan includes source files with uppercase extensions", async () => {
+  await withFixture(async (fixtureDir) => {
+    await writeFile(path.join(fixtureDir, ".env.example"), "");
+    await writeFile(path.join(fixtureDir, "Component.TS"), "process.env.UPPERCASE_EXT;\n");
+
+    const result = await checkEnvironmentVariables(
+      fixtureDir,
+      path.join(fixtureDir, ".env.example")
+    );
+
+    assert.deepEqual(result.referencedVariables, ["UPPERCASE_EXT"]);
+    assert.equal(result.filesScanned, 1);
+  });
+});
+
 test("scan returns referenced variables in sorted order", async () => {
   await withFixture(async (fixtureDir) => {
     await writeFile(path.join(fixtureDir, ".env.example"), "");
