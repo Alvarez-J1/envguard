@@ -53,6 +53,12 @@ test("findEnvReferences ignores longer environment property names", () => {
   assert.deepEqual([...findEnvReferences(source)], ["SECRET_TOKEN"]);
 });
 
+test("findEnvReferences handles trailing semicolons", () => {
+  const source = "const value = process.env.API_URL;\n";
+
+  assert.deepEqual([...findEnvReferences(source)], ["API_URL"]);
+});
+
 test("parseEnvExample reads declared variables", () => {
   const source = `
     # Example configuration
