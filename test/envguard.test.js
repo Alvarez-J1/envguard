@@ -71,6 +71,12 @@ test("findEnvReferences handles member access after env names", () => {
   assert.deepEqual([...findEnvReferences(source)], ["API_URL"]);
 });
 
+test("findEnvReferences allows digits after the first character", () => {
+  const source = "process.env.API_V2_URL;\n";
+
+  assert.deepEqual([...findEnvReferences(source)], ["API_V2_URL"]);
+});
+
 test("parseEnvExample reads declared variables", () => {
   const source = `
     # Example configuration
