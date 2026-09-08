@@ -84,6 +84,7 @@ npx @alvarez-j2/envguard --example-file .env.local.example ./src
 npm install
 npm run check
 npm run pack:dry-run
+npm run check:publish
 ```
 
 `npm run check` type-checks the project, builds the TypeScript sources, and
