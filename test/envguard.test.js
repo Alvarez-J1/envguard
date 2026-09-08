@@ -65,6 +65,12 @@ test("findEnvReferences handles optional chaining after env names", () => {
   assert.deepEqual([...findEnvReferences(source)], ["API_URL"]);
 });
 
+test("findEnvReferences handles member access after env names", () => {
+  const source = "const length = process.env.API_URL.length;\n";
+
+  assert.deepEqual([...findEnvReferences(source)], ["API_URL"]);
+});
+
 test("parseEnvExample reads declared variables", () => {
   const source = `
     # Example configuration
